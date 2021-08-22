@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+<!-- {% block title %} Registro de usuarios {% endblock %}
+ -->
+{% block content %}
+
+    {% for message in get_flashed_messages() %}
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </symbol>
+    </svg>
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+        <div>
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if nombre %}
+        <br/>
+        <p1>Prueba de condición cumplida. Nombre; {{ nombre|upper }}</p1>
+    {% else %}
+        <center>
+        <h1>Registrar Usuario</h1>
+        </center>
+        <br/>
+    <div class="shadow-lg p-3 mb-5 bg-light rounded">
+        <form method="POST">
+            {{ forma.hidden_tag() }}
+
+            {{ forma.nombre.label(class="form-label") }}
+            {{ forma.nombre(class="form-control") }}
+            {{ forma.apellidos.label(class="form-label") }}
+            {{ forma.apellidos(class="form-control") }}
+            {{ forma.clave_hash.label(class="form-label") }}
+            {{ forma.clave_hash(class="form-control") }}
+            {{ forma.clave_hash2.label(class="form-label") }}
+            {{ forma.clave_hash2(class="form-control") }}
+            {{ forma.email.label(class="form-label") }}
+            {{ forma.email(class="form-control") }}
+            <br/>
+            {{ forma.completar(class="btn btn-outline-primary") }}
+        </form>
+    </div>
+        <br/><br/><br/>
+        <table class="table table-hover table-bordered">
+        {% for usuario in lista_usuarios %}
+            <tr>
+            <td>{{ usuario.id }}.  {{ usuario.nombre }} {{ usuario.apellidos }}- {{ usuario.email }} PW: {{ usuario.clave_hash }} 
+            </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+    
+{% endblock %}

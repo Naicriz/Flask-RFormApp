@@ -5,11 +5,11 @@ from wtforms import StringField, SubmitField, ValidationError
 from wtforms.fields.simple import PasswordField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 #
 #MODELO DATABASE USUARIO
 #
-class users(db.Model):
+class users(db.Model, UserMixin):
     __tablename__    = 'users'
     id = db.Column(db.Integer, primary_key=True)
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
@@ -37,7 +37,7 @@ class users(db.Model):
 #
 #FORM CLASS - #Registro de Usuario
 #
-class registerForm(FlaskForm):
+class userForm(FlaskForm):
     nombre = StringField("Nombre", validators = [DataRequired()])
     apellidos = StringField("Apellidos", validators = [DataRequired()])
     email = StringField("E-mail", validators = [DataRequired()])

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+<!-- {% block title %} Registro de usuarios {% endblock %}
+ -->
+{% block content %}
+
+    {% if nombre %}
+        <br/>
+        <p1>Prueba de condición cumplida. Nombre; {{ nombre|upper }}</p1>
+    {% else %}
+        <center>
+        <h1>Iniciar Sesión</h1>
+        </center>
+        <br/>
+    <div class="shadow-lg p-3 mb-5 bg-light rounded">
+        <form method="POST">
+            {{ forma.hidden_tag() }}
+
+            {{ forma.email.label(class="form-label") }}
+            {{ forma.email(class="form-control") }}
+            {{ forma.clave_hash.label(class="form-label") }}
+            {{ forma.clave_hash(class="form-control") }}
+
+            <br/>
+            {{ forma.completar(class="btn btn-outline-primary") }}
+        </form>
+    </div>
+    {% endif %}
+    
+{% endblock %}

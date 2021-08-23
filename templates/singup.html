@@ -48,7 +48,7 @@
         <table class="table table-hover table-bordered">
         {% for usuario in lista_usuarios %}
             <tr>
-            <td>{{ usuario.id }}.  {{ usuario.nombre }} {{ usuario.apellidos }}- {{ usuario.email }} PW: {{ usuario.clave_hash }} 
+            <td>{{ usuario.id }}.  {{ usuario.nombre }} {{ usuario.apellidos }} - {{ usuario.email }} - PW: {{ usuario.clave_hash }} 
             </td>
             </tr>
         {% endfor %}

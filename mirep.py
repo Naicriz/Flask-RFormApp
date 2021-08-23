@@ -3,7 +3,7 @@
 #                   #
 from werkzeug.security import generate_password_hash
 from basico import app, db
-from singup import registerForm, users
+from logsing import userForm, users
 from flask import Flask, render_template, flash
 
 #
@@ -11,7 +11,7 @@ from flask import Flask, render_template, flash
 #
 @app.route('/') #PRINCIPAL 
 def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')}} en las templates(html) 
-    flash("Aplicación en desarrollo - Version 0.4")
+    flash("Aplicación en desarrollo - Version 0.5")
     return render_template('index.html')
 
 
@@ -21,7 +21,7 @@ def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')
 #
 @app.route('/usuario/singup', methods = ['GET', 'POST'])
 def singUp():
-    forma = registerForm()
+    forma = userForm()
     usuario = ''
     nombre = ''
     apellidos = ''
@@ -58,6 +58,27 @@ def singUp():
 
 
 
+
+#
+#LOGIN
+#
+@app.route('/usuario/login', methods = ['GET', 'POST'])
+def logIn():
+    forma = userForm()
+    return render_template('login.html',
+                           forma = forma)
+    
+    
+
+#
+#DASHBOARD
+#
+@app.route('/dashboard', methods = ['GET', 'POST'])
+def dashboard():
+    return render_template('dashboard.html')
+    
+    
+      
 #
 #NEW REPORT
 #

@@ -1,7 +1,7 @@
 #                   #
 # Made by Naizajar  #
 #                   #
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from basico import db, app, login_manager
 from logsing import userForm, loginForm, users
 from flask import Flask, render_template, flash
@@ -13,9 +13,8 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 #
 @app.route('/') #PRINCIPAL 
 def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')}} en las templates(html) 
-    flash("Aplicación en desarrollo - Version 0.5")
+    flash("Aplicación en desarrollo - Version 0.6")
     return render_template('index.html')
-
 
 
 #
@@ -24,10 +23,10 @@ def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')
 @app.route('/singup', methods = ['GET', 'POST'])
 def singUp():
     forma = userForm()
-    usuario = ''
-    nombre = ''
-    apellidos = ''
-    email = ''
+    usuario = None
+    nombre = None
+    apellidos = None
+    email = None
     
     #Validación para la forma
     if forma.validate_on_submit():
@@ -71,24 +70,30 @@ def loadUser(usuario_id):
 #
 @app.route('/login', methods = ['GET', 'POST'])
 def logIn():
-    email = ''
-    clave = ''
-    clave_check = ''
-    valido = ''
     forma = loginForm()
+    email = None
+    clave = None
+    clave_check = None
+    valido = None
     
     if forma.validate_on_submit():
         email = forma.email.data
         clave = forma.clave_hash.data
-        #limpiar forma
+        #Limpiar forma
         forma.email.data = ''
         forma.clave_hash.data = ''
         
-    clave_a_check = users.query.filter_by(email=email).first()
+        #Lookup por Email
+        clave_check = users.query.filter_by(email=email).first()
+        
+        #Check hashed password
+        valido = check_password_hash(clave_check.clave_hash, clave)
+
     return render_template('login.html',
                            email = email,
                            clave = clave,
-                           clave_a_check = clave_a_check,
+                           clave_check = clave_check,
+                           valido = valido,
                            forma = forma)
     
     
@@ -96,11 +101,11 @@ def logIn():
 #
 #DASHBOARD
 #
-@login_required
-@app.route('/dashboard', methods = ['GET', 'POST'])
-def dashboard():
-    flash("¡Debes iniciar sesión primero!")
-    return render_template('dashboard.html')
+#@login_required
+#@app.route('/dashboard', methods = ['GET', 'POST'])
+#def dashboard():
+#    flash("¡Debes iniciar sesión primero!")
+#    return render_template('dashboard.html')
     
     
       

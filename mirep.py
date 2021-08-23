@@ -2,9 +2,11 @@
 # Made by Naizajar  #
 #                   #
 from werkzeug.security import generate_password_hash
-from basico import app, db
-from logsing import userForm, users
+from basico import db, app, login_manager
+from logsing import userForm, loginForm, users
 from flask import Flask, render_template, flash
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+
 
 #
 #ROOT
@@ -19,7 +21,7 @@ def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')
 #
 #SINGUP
 #
-@app.route('/usuario/singup', methods = ['GET', 'POST'])
+@app.route('/singup', methods = ['GET', 'POST'])
 def singUp():
     forma = userForm()
     usuario = ''
@@ -58,14 +60,35 @@ def singUp():
 
 
 
+@login_manager.user_loader
+def loadUser(usuario_id):
+    return users.query.get(int(usuario_id))
+
+
 
 #
 #LOGIN
 #
-@app.route('/usuario/login', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['GET', 'POST'])
 def logIn():
-    forma = userForm()
+    email = ''
+    clave = ''
+    clave_check = ''
+    valido = ''
+    forma = loginForm()
+    
+    if forma.validate_on_submit():
+        email = forma.email.data
+        clave = forma.clave_hash.data
+        #limpiar forma
+        forma.email.data = ''
+        forma.clave_hash.data = ''
+        
+    clave_a_check = users.query.filter_by(email=email).first()
     return render_template('login.html',
+                           email = email,
+                           clave = clave,
+                           clave_a_check = clave_a_check,
                            forma = forma)
     
     
@@ -73,8 +96,10 @@ def logIn():
 #
 #DASHBOARD
 #
+@login_required
 @app.route('/dashboard', methods = ['GET', 'POST'])
 def dashboard():
+    flash("¡Debes iniciar sesión primero!")
     return render_template('dashboard.html')
     
     

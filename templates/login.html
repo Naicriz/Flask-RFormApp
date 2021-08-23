@@ -4,27 +4,34 @@
  -->
 {% block content %}
 
-    {% if nombre %}
+    {% if email %}
         <br/>
-        <p1>Prueba de condición cumplida. Nombre; {{ nombre|upper }}</p1>
+        <p1>Email: {{ email|upper }}</p1></br>
+        <p1>Contraseña: {{ clave|upper }}</p1>
+        <br/>
+        <h2>Info: </h2>
+        <br/>
+        Nombre: {{clave_a_check.nombre}}
+        Email: {{clave_a_check.email}}
+        Contraseña: {{clave_a_check.clave_hash}}
     {% else %}
         <center>
         <h1>Iniciar Sesión</h1>
         </center>
         <br/>
-    <div class="shadow-lg p-3 mb-5 bg-light rounded">
-        <form method="POST">
-            {{ forma.hidden_tag() }}
-
-            {{ forma.email.label(class="form-label") }}
-            {{ forma.email(class="form-control") }}
-            {{ forma.clave_hash.label(class="form-label") }}
-            {{ forma.clave_hash(class="form-control") }}
-
-            <br/>
-            {{ forma.completar(class="btn btn-outline-primary") }}
-        </form>
-    </div>
+        <div class="shadow-lg p-3 mb-5 bg-light rounded">
+            <form method="POST">
+                {{ forma.hidden_tag() }}
+    
+                {{ forma.email.label(class="form-label") }}
+                {{ forma.email(class="form-control") }}
+                {{ forma.clave_hash.label(class="form-label") }}
+                {{ forma.clave_hash(class="form-control") }}
+    
+                <br/>
+                {{ forma.completar(class="btn btn-outline-primary") }}
+            </form>
+        </div>
     {% endif %}
     
 {% endblock %}

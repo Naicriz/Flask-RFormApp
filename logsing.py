@@ -6,6 +6,7 @@ from wtforms.fields.simple import PasswordField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+
 #
 #MODELO DATABASE USUARIO
 #
@@ -48,3 +49,11 @@ class userForm(FlaskForm):
     completar = SubmitField("Completar")
 
 
+
+#
+#FORM CLASS - #Inicio de Sesión
+#
+class loginForm(FlaskForm):
+    email = StringField('E-mail', validators=[DataRequired()])
+    clave_hash = PasswordField('Contraseña', validators=[DataRequired()])
+    completar = SubmitField("Iniciar Sesión")

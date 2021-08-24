@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 
 #

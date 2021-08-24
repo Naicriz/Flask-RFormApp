@@ -29,15 +29,21 @@
     <div class="shadow-lg p-3 mb-5 bg-light rounded">
         <form method="POST">
             {{ forma.hidden_tag() }}
-
+            
             {{ forma.nombre.label(class="form-label") }}
             {{ forma.nombre(class="form-control") }}
             {{ forma.apellidos.label(class="form-label") }}
             {{ forma.apellidos(class="form-control") }}
-            {{ forma.clave_hash.label(class="form-label") }}
-            {{ forma.clave_hash(class="form-control") }}
-            {{ forma.clave_hash2.label(class="form-label") }}
-            {{ forma.clave_hash2(class="form-control") }}
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    {{ forma.clave_hash.label(class="col-form-label", label="inputPassword6") }}
+                    {{ forma.clave_hash(class="form-control") }}
+                </div>
+                <div class="col-auto">
+                    {{ forma.clave_hash2.label(class="col-form-label", label="inputPassword6") }}
+                    {{ forma.clave_hash2(class="form-control") }}
+                </div>
+            </div>
             {{ forma.email.label(class="form-label") }}
             {{ forma.email(class="form-control") }}
             <br/>

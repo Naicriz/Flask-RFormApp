@@ -7,7 +7,6 @@ from logsing import userForm, loginForm, users
 from flask import Flask, render_template, flash
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 
-
 #
 #ROOT
 #
@@ -15,6 +14,7 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')}} en las templates(html) 
     flash("Aplicación en desarrollo - Version 0.6")
     return render_template('index.html')
+
 
 
 #

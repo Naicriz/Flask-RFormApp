@@ -3,16 +3,17 @@
 #                   #
 from werkzeug.security import check_password_hash, generate_password_hash
 from basico import db, app, login_manager
-from logsing import userForm, loginForm, users
+from modelos import users, subjects, reports, userForm, loginForm, subjectForm, reportForm
 from flask import Flask, render_template, flash
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from sqlalchemy.orm import relationship
 
 #
 #ROOT
 #
 @app.route('/') #PRINCIPAL 
 def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')}} en las templates(html) 
-    flash("Aplicación en desarrollo - Version 0.6")
+    flash("Aplicación en desarrollo - Version 0.9")
     return render_template('index.html')
 
 
@@ -66,7 +67,7 @@ def loadUser(usuario_id):
 
 
 #
-#LOGIN
+#LOGIN - TEST SIN CONECTAR (AUN NO LOGUEA DE POR SI)
 #
 @app.route('/login', methods = ['GET', 'POST'])
 def logIn():
@@ -112,9 +113,46 @@ def logIn():
 #
 #NEW REPORT
 #
-@app.route('/reportes/newreport')
+@app.route('/reportes/newreport', methods=['GET', 'POST'])
 def newReport():
-    return render_template('newreport.html')
+    forma = reportForm()
+    local = None
+    fecha_ingreso = None
+    fecha_salida = None
+    motivo_salida = None
+    satisfaccion = None
+    recomendacion = None
+    comentarios = None
+    #Validación para la forma
+    if forma.validate_on_submit():
+        reporte = reports(local = forma.local.data,
+                          fecha_ingreso = forma.fecha_ingreso.data,
+                          fecha_salida = forma.fecha_salida.data,
+                          motivo_salida = forma.motivo_salida.data,
+                          satisfaccion = forma.satisfaccion.data,
+                          recomendacion = forma.recomendacion.data,
+                          comentarios = forma.recomendacion.data)
+        #enviar a database
+        db.session.add(reporte)
+        db.session.commit()
+        #Limpiar forma
+        forma.local.data = ''
+        forma.fecha_ingreso.data = ''
+        forma.fecha_salida.data = ''
+        forma.motivo_salida.data = ''
+        forma.satisfaccion.data = ''
+        forma.recomendacion.data = ''
+        forma.recomendacion.data = ''
+        flash("¡Reporte creado exitosamente!")
+        
+    return render_template('newreport.html', local = local,
+                           fecha_ingreso = fecha_ingreso,
+                           fecha_salida = fecha_salida,
+                           motivo_salida = motivo_salida,
+                           satisfaccion = satisfaccion,
+                           recomendacion = recomendacion,
+                           comentarios = comentarios,
+                           forma = forma)
 
 
 

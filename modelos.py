@@ -3,7 +3,7 @@ from wtforms.fields.core import DateField
 from basico import db
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, ValidationError
+from wtforms import StringField, SubmitField, ValidationError, RadioField
 from wtforms.fields.simple import PasswordField, BooleanField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from wtforms.widgets import TextArea
 from sqlalchemy.orm import relationship
+
 #from sqlalchemy.ext.declarative import declarative_base
 
 #base = declarative_base() #enconjunta todas las db?
@@ -68,8 +69,7 @@ class reports(db.Model):
     satisfaccion = db.Column(db.Integer, nullable=False)
     recomendacion = db.Column(db.String(500), nullable=False)
     comentarios = db.Column(db.String(500), nullable=False)
-    
-    subject = db.relationship(subjects)
+    #subject = db.relationship(subjects)
 
 
 
@@ -78,40 +78,40 @@ class reports(db.Model):
 #FORM CLASS - #Registro de Usuario
 #
 class userForm(FlaskForm):
-    nombre = StringField("Nombre", validators = [DataRequired()])
-    apellidos = StringField("Apellidos", validators = [DataRequired()])
-    email = StringField("E-mail", validators = [DataRequired()])
-    clave_hash = PasswordField("Contraseña", validators = [DataRequired(),
+    nombre = StringField("Nombre", render_kw={"placeholder": "nombre"}, validators = [DataRequired()])
+    apellidos = StringField("Apellidos", render_kw={"placeholder": "apellido apellido"}, validators = [DataRequired()])
+    email = StringField("E-mail", render_kw={"placeholder": "mail@ejemplo.cl"}, validators = [DataRequired()])
+    clave_hash = PasswordField("Contraseña", render_kw={"placeholder": "contraseña"}, validators = [DataRequired(),
                                 EqualTo('clave_hash2',
                                 message='Las contraseñas deben coincidir.')])
-    clave_hash2 = PasswordField("Confirmar Contraseña", validators = [DataRequired()])
+    clave_hash2 = PasswordField("Confirmar contraseña", render_kw={"placeholder": "contraseña"}, validators = [DataRequired()])
     completar = SubmitField("Completar")
 #
 #FORM CLASS - #Inicio de Sesión
 #
 class loginForm(FlaskForm):
-    email = StringField('E-mail', validators=[DataRequired()])
-    clave_hash = PasswordField('Contraseña', validators=[DataRequired()])
+    email = StringField('E-mail', render_kw={"placeholder": "mail@ejemplo.cl"}, validators=[DataRequired()])
+    clave_hash = PasswordField('Contraseña', render_kw={"placeholder": "contraseña"}, validators=[DataRequired()])
     completar = SubmitField("Iniciar Sesión")
     
 #
 #FORM CLASS - #Registrar sujeto
 #
 class subjectForm(FlaskForm):
-    nombre = StringField("Nombre", validators = [DataRequired()])
-    apellidos = StringField("Apellidos", validators = [DataRequired()])
-    rut = PasswordField("Rut", validators = [DataRequired()])
+    nombre = StringField("Nombre", render_kw={"placeholder": "nombre"}, validators = [DataRequired()])
+    apellidos = StringField("Apellidos", render_kw={"placeholder": "apellido apellido"}, validators = [DataRequired()])
+    rut = StringField("Rut", render_kw={"placeholder": "12345678-9"}, validators = [DataRequired()])
     completar = SubmitField("Confirmar Datos")
 
 #
 #FORM CLASS - #Reporte de sujeto
 #
 class reportForm(FlaskForm):
-    local = StringField("Local de trabajo", validators = [DataRequired()])
+    local = StringField("Local de trabajo", render_kw={"placeholder": "establecimiento"}, validators = [DataRequired()])
     fecha_ingreso = DateField("Fecha de ingreso laboral", format='%Y-%m-%d', validators = [DataRequired()])
     fecha_salida = DateField("Fecha de salida laboral", format='%Y-%m-%d', validators = [DataRequired()])
-    motivo_salida = StringField("Motivo de salida", validators = [DataRequired()])
-    satisfaccion = StringField("Satisfacción 1 a 10", validators = [DataRequired()])
-    recomendacion = StringField("¿Se recomienda?", validators = [DataRequired()])
-    comentarios = StringField("Comentarios", widget=TextArea(), validators = [DataRequired()])
-    completar = SubmitField("Confirmar Datos")
+    motivo_salida = StringField("Motivo de salida", render_kw={"placeholder": "¿por que dejo de trabajar?"}, validators = [DataRequired()])
+    satisfaccion = StringField("Indica tu grado de satisfacción", validators = [DataRequired()])
+    recomendacion = RadioField("¿Se recomienda?", choices = [(1, 'Sí'),(0, 'No')], validators = [DataRequired()])
+    comentarios = StringField("Comentarios", render_kw={"placeholder": "comentarios adicionales..."}, widget=TextArea(), validators = [DataRequired()])
+    completar = SubmitField("Crear Reporte")

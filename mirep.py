@@ -13,7 +13,7 @@ from sqlalchemy.orm import relationship
 #
 @app.route('/') #PRINCIPAL 
 def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')}} en las templates(html) 
-    flash("Aplicación en desarrollo - Version 0.9")
+    flash("Aplicación en desarrollo - Version 1.0")
     return render_template('index.html')
 
 
@@ -114,7 +114,25 @@ def logIn():
 #NEW REPORT
 #
 @app.route('/reportes/newreport', methods=['GET', 'POST'])
-def newReport():
+def newReport():    
+    forma2 = subjectForm()
+    nombre = ''
+    apellidos = ''
+    rut = ''
+    #Validación para la forma #### NO RECIBE DATOS LA FORMA DE AÑADIR SUJETO (AÚN)
+    if forma2.validate_on_submit():
+        sujeto = subjects(nombre = nombre,
+                          apellidos = apellidos,
+                          rut = rut)
+        #enviar a database
+        db.session.add(sujeto)
+        db.session.commit()
+        #Limpiar forma
+        forma2.nombre.data = ''
+        forma2.apellidos.data = ''
+        forma2.rut.data = ''
+        flash("¡Sujeto creado exitosamente!")
+    
     forma = reportForm()
     local = None
     fecha_ingreso = None
@@ -132,10 +150,6 @@ def newReport():
                           satisfaccion = forma.satisfaccion.data,
                           recomendacion = forma.recomendacion.data,
                           comentarios = forma.recomendacion.data)
-        #enviar a database
-        db.session.add(reporte)
-        db.session.commit()
-        #Limpiar forma
         forma.local.data = ''
         forma.fecha_ingreso.data = ''
         forma.fecha_salida.data = ''
@@ -144,7 +158,9 @@ def newReport():
         forma.recomendacion.data = ''
         forma.recomendacion.data = ''
         flash("¡Reporte creado exitosamente!")
-        
+                #enviar a database
+        db.session.add(reporte)
+        db.session.commit()
     return render_template('newreport.html', local = local,
                            fecha_ingreso = fecha_ingreso,
                            fecha_salida = fecha_salida,
@@ -152,10 +168,17 @@ def newReport():
                            satisfaccion = satisfaccion,
                            recomendacion = recomendacion,
                            comentarios = comentarios,
-                           forma = forma)
+                           forma = forma,
+                           forma2 = forma2)
 
 
 
+@app.route('/reportes/reportsall', methods=['GET', 'POST'])
+def reportsAll():
+    reports_all = reports()
+    
+    lista_reportes = reports.query.order_by(reports.fecha_creacion)
+    return render_template('reportsall.html', lista_reportes = lista_reportes)
 #
 #ERRORES CUSTOM DE PÁGINAS
 #

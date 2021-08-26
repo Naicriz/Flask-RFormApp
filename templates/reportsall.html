@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+<!-- {% block title %} Registro de usuarios {% endblock %}
+ -->
+{% block content %}
+<center>
+    <h1>REPORTES</h1>
+    </center>
+    <br/>
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <form method="POST">
+        <fieldset>
+            <!-- <legend>LISTA Y SUJETOS</legend> -->
+            <table class="table table-hover table-bordered">
+            {% for reporte in lista_reportes %}
+                <tr>
+                <td>id: {{ reporte.id }} - userid: {{ reporte.user_id }} - sujetoid: {{ reporte.subject_id }} - satisfacción: {{ reporte.satisfaccion }} - recomendacion: {{ reporte.recomendacion }} - Fecha Salida: {{ reporte.fecha_salida }} - Comentarios: {{ reporte.comentarios }} 
+                </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </fieldset>
+    </form>
+</div>
+
+
+<table class="table table-hover">
+    <tbody>
+      <tr class="table-light">
+        <th scope="row">Light</th>
+        <td>Column content</td>
+        <td>Column content</td>
+        <td>Column content</td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}

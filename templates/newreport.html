@@ -23,6 +23,29 @@
     <div class="shadow-lg p-3 mb-5 bg-light rounded">
         <form method="POST">
             <fieldset>
+                <legend>SUJETO</legend>
+                {{ forma.hidden_tag() }}
+                <div class="row">
+                    <div class="col">
+                        {{ forma2.nombre.label(class="col-form-label") }}
+                        {{ forma2.nombre(class="form-control") }}
+                    </div>
+                    <div class="col">
+                        {{ forma2.apellidos.label(class="col-form-label") }}
+                        {{ forma2.apellidos(class="form-control") }}
+                    </div>
+                    <br/>
+                    {{ forma2.rut.label(class="col-form-label") }}
+                    {{ forma2.rut(class="form-control") }}
+                </div>
+                    {{ forma2.completar(class="btn btn-outline-primary") }}
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="shadow-lg p-3 mb-5 bg-light rounded">
+        <form method="POST">
+            <fieldset>
                 <legend>AÑADIR REPORTE</legend>
                 {{ forma.hidden_tag() }}
                 <div class="col">

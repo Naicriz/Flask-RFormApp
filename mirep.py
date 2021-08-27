@@ -7,6 +7,7 @@ from modelos import users, subjects, reports, userForm, loginForm, subjectForm, 
 from flask import Flask, render_template, flash
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from sqlalchemy.orm import relationship
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 #
 #ROOT
@@ -108,32 +109,58 @@ def logIn():
 #    flash("¡Debes iniciar sesión primero!")
 #    return render_template('dashboard.html')
     
-    
-      
+  
+  
+  
+  
 #
-#NEW REPORT
-#
+#REPORTES NEW REPORT
+#  
 @app.route('/reportes/newreport', methods=['GET', 'POST'])
-def newReport():    
-    forma2 = subjectForm()
-    nombre = ''
-    apellidos = ''
-    rut = ''
+def newReport():
+    forma_s = subjectForm()
+    forma_r = reportForm()
+    
+    return render_template('newreport.html',
+                           forma_s=forma_s, forma_r=forma_r)
+#
+#ADD SUBJECT
+#
+@app.route('/reportes/addsubject', methods=['GET', 'POST'])
+def addSubject():  
+    forma_s = subjectForm()
+    forma_r = reportForm()
+    nombre = None
+    apellidos = None
+    rut = None
     #Validación para la forma #### NO RECIBE DATOS LA FORMA DE AÑADIR SUJETO (AÚN)
-    if forma2.validate_on_submit():
-        sujeto = subjects(nombre = nombre,
-                          apellidos = apellidos,
-                          rut = rut)
+    if forma_s.validate_on_submit():
+        sujeto = subjects(nombre = forma_s.nombre.data,
+                          apellidos = forma_s.apellidos.data,
+                          rut = forma_s.rut.data)
+        #Limpiar forma
+        forma_s.nombre.data = ''
+        forma_s.apellidos.data = ''
+        forma_s.rut.data = ''
         #enviar a database
         db.session.add(sujeto)
         db.session.commit()
-        #Limpiar forma
-        forma2.nombre.data = ''
-        forma2.apellidos.data = ''
-        forma2.rut.data = ''
         flash("¡Sujeto creado exitosamente!")
+    return render_template('newreport.html',
+                           nombre=nombre,
+                           apellidos=apellidos,
+                           rut=rut,
+                           forma_s=forma_s, forma_r=forma_r)
     
-    forma = reportForm()
+    
+    
+#
+#ADD REPORT
+#
+@app.route('/reportes/addreport', methods=['GET', 'POST'])
+def addReport():    
+    forma_r = reportForm()
+    forma_s = subjectForm()
     local = None
     fecha_ingreso = None
     fecha_salida = None
@@ -142,43 +169,53 @@ def newReport():
     recomendacion = None
     comentarios = None
     #Validación para la forma
-    if forma.validate_on_submit():
-        reporte = reports(local = forma.local.data,
-                          fecha_ingreso = forma.fecha_ingreso.data,
-                          fecha_salida = forma.fecha_salida.data,
-                          motivo_salida = forma.motivo_salida.data,
-                          satisfaccion = forma.satisfaccion.data,
-                          recomendacion = forma.recomendacion.data,
-                          comentarios = forma.recomendacion.data)
-        forma.local.data = ''
-        forma.fecha_ingreso.data = ''
-        forma.fecha_salida.data = ''
-        forma.motivo_salida.data = ''
-        forma.satisfaccion.data = ''
-        forma.recomendacion.data = ''
-        forma.recomendacion.data = ''
-        flash("¡Reporte creado exitosamente!")
-                #enviar a database
+    if forma_r.validate_on_submit():
+        reporte = reports(local = forma_r.local.data,
+                          fecha_ingreso = forma_r.fecha_ingreso.data,
+                          fecha_salida = forma_r.fecha_salida.data,
+                          motivo_salida = forma_r.motivo_salida.data,
+                          satisfaccion = forma_r.satisfaccion.data,
+                          recomendacion = forma_r.recomendacion.data,
+                          comentarios = forma_r.recomendacion.data)
+        #Limpiar forma
+        forma_r.local.data = ''
+        forma_r.fecha_ingreso.data = ''
+        forma_r.fecha_salida.data = ''
+        forma_r.motivo_salida.data = ''
+        forma_r.satisfaccion.data = ''
+        forma_r.recomendacion.data = ''
+        forma_r.comentarios.data = ''
+        #enviar a database
         db.session.add(reporte)
         db.session.commit()
-    return render_template('newreport.html', local = local,
-                           fecha_ingreso = fecha_ingreso,
-                           fecha_salida = fecha_salida,
-                           motivo_salida = motivo_salida,
-                           satisfaccion = satisfaccion,
-                           recomendacion = recomendacion,
-                           comentarios = comentarios,
-                           forma = forma,
-                           forma2 = forma2)
+        flash("¡Reporte creado exitosamente!")
+    return render_template('newreport.html', local=local,
+                           fecha_ingreso=fecha_ingreso,
+                           fecha_salida=fecha_salida,
+                           motivo_salida=motivo_salida,
+                           satisfaccion=satisfaccion,
+                           recomendacion=recomendacion,
+                           comentarios=comentarios,
+                           forma_s=forma_s, forma_r=forma_r)
 
 
 
+#
+#LISTA REPORTES
+#
 @app.route('/reportes/reportsall', methods=['GET', 'POST'])
 def reportsAll():
-    reports_all = reports()
-    
+    subjects_todo = subjects()
+    reports_todo = reports()
     lista_reportes = reports.query.order_by(reports.fecha_creacion)
-    return render_template('reportsall.html', lista_reportes = lista_reportes)
+    return render_template('reportsall.html',
+                           lista_reportes = lista_reportes)
+    
+    
+    
+    
+    
+    
 #
 #ERRORES CUSTOM DE PÁGINAS
 #

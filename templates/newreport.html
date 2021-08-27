@@ -21,51 +21,52 @@
         </center>
         <br/>
     <div class="shadow-lg p-3 mb-5 bg-light rounded">
-        <form method="POST">
+        <form action="{{ url_for('addSubject') }}" method="POST">
             <fieldset>
-                <legend>SUJETO</legend>
-                {{ forma.hidden_tag() }}
+                <legend>AÑADIR SUJETO</legend>
+                {{ forma_s.hidden_tag() }}
                 <div class="row">
                     <div class="col">
-                        {{ forma2.nombre.label(class="col-form-label") }}
-                        {{ forma2.nombre(class="form-control") }}
+                        {{ forma_s.nombre.label(class="col-form-label") }}
+                        {{ forma_s.nombre(class="form-control") }}
                     </div>
                     <div class="col">
-                        {{ forma2.apellidos.label(class="col-form-label") }}
-                        {{ forma2.apellidos(class="form-control") }}
+                        {{ forma_s.apellidos.label(class="col-form-label") }}
+                        {{ forma_s.apellidos(class="form-control") }}
                     </div>
                     <br/>
-                    {{ forma2.rut.label(class="col-form-label") }}
-                    {{ forma2.rut(class="form-control") }}
+                    {{ forma_s.rut.label(class="col-form-label") }}
+                    {{ forma_s.rut(class="form-control") }}
                 </div>
-                    {{ forma2.completar(class="btn btn-outline-primary") }}
+                <br/>
+                {{ forma_s.completar(class="btn btn-outline-primary") }}
             </fieldset>
         </form>
     </div>
 
     <div class="shadow-lg p-3 mb-5 bg-light rounded">
-        <form method="POST">
+        <form action="{{ url_for('addReport') }}" method="POST">
             <fieldset>
                 <legend>AÑADIR REPORTE</legend>
-                {{ forma.hidden_tag() }}
+                {{ forma_r.hidden_tag() }}
                 <div class="col">
-                    {{ forma.local.label(class="form-label") }}
-                    {{ forma.local(class="form-control") }}
-                    {{ forma.fecha_ingreso.label(class="form-label") }}
-                    {{ forma.fecha_ingreso(class="form-control") }}
-                    {{ forma.fecha_salida.label(class="form-label") }}
-                    {{ forma.fecha_salida(class="form-control") }}
-                    {{ forma.motivo_salida.label(class="form-label") }}
-                    {{ forma.motivo_salida(class="form-control") }}
-                    {{ forma.satisfaccion.label(class="form-label", for="CustomRange3") }}
-                    {{ forma.satisfaccion(class="form-range", type="range", min="1", max="10", id="CustomRange3") }}
-                    {{ forma.recomendacion.label(class="form-label") }}
-                    {{ forma.recomendacion(class="form-control") }}
-                    {{ forma.comentarios.label(class="form-label") }}
-                    {{ forma.comentarios(class="form-control") }}
+                    {{ forma_r.local.label(class="form-label") }}
+                    {{ forma_r.local(class="form-control") }}
+                    {{ forma_r.fecha_ingreso.label(class="form-label") }}
+                    {{ forma_r.fecha_ingreso(class="form-control") }}
+                    {{ forma_r.fecha_salida.label(class="form-label") }}
+                    {{ forma_r.fecha_salida(class="form-control") }}
+                    {{ forma_r.motivo_salida.label(class="form-label") }}
+                    {{ forma_r.motivo_salida(class="form-control") }}
+                    {{ forma_r.satisfaccion.label(class="form-label", for="CustomRange3") }}
+                    {{ forma_r.satisfaccion(class="form-range", type="range", min="1", max="10", id="CustomRange3") }}
+                    {{ forma_r.recomendacion.label(class="form-label") }}
+                    {{ forma_r.recomendacion(class="form-control") }}
+                    {{ forma_r.comentarios.label(class="form-label") }}
+                    {{ forma_r.comentarios(class="form-control") }}
                 </div>
                 <br/>
-                {{ forma.completar(class="btn btn-outline-primary") }}
+                {{ forma_r.completar(class="btn btn-outline-primary") }}
             </fieldset>
         </form>
     </div>

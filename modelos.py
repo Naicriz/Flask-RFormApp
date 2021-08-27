@@ -23,7 +23,7 @@ from sqlalchemy.orm import relationship
 class users(db.Model, UserMixin):
     __tablename__    = 'user_form'
     id = db.Column(db.Integer, primary_key=True)
-    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     nombre = db.Column(db.String(32), nullable=False)
     apellidos = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(125), nullable=False, unique=True)
@@ -61,14 +61,14 @@ class reports(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user_form.id'))
     subject_id = db.Column(db.Integer, db.ForeignKey('subject_form.id'))
-    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
-    local = db.Column(db.String(128), nullable=True)
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    local = db.Column(db.String(128), nullable=False)
     fecha_ingreso = db.Column(db.Date, nullable=False)
     fecha_salida = db.Column(db.Date, nullable=False)
     motivo_salida = db.Column(db.String(500), nullable=False)
     satisfaccion = db.Column(db.Integer, nullable=False)
-    recomendacion = db.Column(db.String(500), nullable=False)
-    comentarios = db.Column(db.String(500), nullable=False)
+    recomendacion = db.Column(db.Integer, nullable=False)
+    comentarios = db.Column(db.String(1000), nullable=False)
     #subject = db.relationship(subjects)
 
 

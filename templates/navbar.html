@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index') }}">MIREP APP v1.0</a>
+    <a class="navbar-brand" href="{{ url_for('index') }}">MIREP APP v1.1</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,7 +24,7 @@
             <a class="dropdown-item" href="{{ url_for('logIn')}}">Iniciar sesión</a>
             <a class="dropdown-item" href="{{ url_for('singUp')}}">Registrarse</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">item 3</a>
+            <a class="dropdown-item" href="{{ url_for('singUp')}}">Cerrar sisión</a>
           </div>
         </li>
       </ul>

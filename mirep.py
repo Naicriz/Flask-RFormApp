@@ -1,7 +1,9 @@
 #                   #
 # Made by Naizajar  #
 #                   #
+from flask.helpers import url_for
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import redirect
 from basico import db, app, login_manager
 from modelos import users, subjects, reports, userForm, loginForm, subjectForm, reportForm
 from flask import Flask, render_template, flash
@@ -14,7 +16,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 #
 @app.route('/') #PRINCIPAL 
 def index(): #de la 'def' se piden los datos de la forma {{ url_for('nombreVar')}} en las templates(html) 
-    flash("Aplicación en desarrollo - Version 1.0")
+    flash("Aplicación en desarrollo - Version 1.1")
     return render_template('index.html')
 
 
@@ -68,8 +70,39 @@ def loadUser(usuario_id):
 
 
 #
-#LOGIN - TEST SIN CONECTAR (AUN NO LOGUEA DE POR SI)
+#LOGOUT
 #
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logOut():
+    logout_user()
+    flash("¡Cerraste Sesión Correctamente!")
+    return redirect(url_for ('index'))
+
+
+#
+#LOGIN FUNCIONAL
+#
+@app.route('/login', methods = ['GET', 'POST'])
+def logIn():
+    forma = loginForm()
+    if forma.validate_on_submit():
+        usuario = users.query.filter_by(email=forma.email.data).first() #Obtiene el dato desde la tabladb users
+        if usuario:
+            #checkear el hash
+            if check_password_hash(usuario.clave_hash, forma.clave_hash.data):
+                login_user(usuario)
+                flash("Has iniciado Sesión correctamente!")
+                return redirect(url_for('dashboard'))
+            else:
+                flash("Contraseña Incorrecta - Intenta Nuevamente!")
+        else:
+            flash("Usuario no Existe - Intenta Nuevamente!")
+    return render_template('login.html', forma = forma)
+
+
+'''
+@DEPRECATED LOGIN
 @app.route('/login', methods = ['GET', 'POST'])
 def logIn():
     forma = loginForm()
@@ -97,17 +130,17 @@ def logIn():
                            clave_check = clave_check,
                            valido = valido,
                            forma = forma)
-    
+'''
     
 
 #
 #DASHBOARD
 #
-#@login_required
-#@app.route('/dashboard', methods = ['GET', 'POST'])
-#def dashboard():
-#    flash("¡Debes iniciar sesión primero!")
-#    return render_template('dashboard.html')
+@app.route('/dashboard', methods = ['GET', 'POST'])
+@login_required
+def dashboard():
+    flash("¡Debes iniciar sesión primero!")
+    return render_template('dashboard.html')
     
   
   
@@ -117,6 +150,7 @@ def logIn():
 #REPORTES NEW REPORT
 #  
 @app.route('/reportes/newreport', methods=['GET', 'POST'])
+@login_required
 def newReport():
     forma_s = subjectForm()
     forma_r = reportForm()
@@ -127,13 +161,13 @@ def newReport():
 #ADD SUBJECT
 #
 @app.route('/reportes/addsubject', methods=['GET', 'POST'])
+@login_required
 def addSubject():  
     forma_s = subjectForm()
     forma_r = reportForm()
     nombre = None
     apellidos = None
     rut = None
-    #Validación para la forma #### NO RECIBE DATOS LA FORMA DE AÑADIR SUJETO (AÚN)
     if forma_s.validate_on_submit():
         sujeto = subjects(nombre = forma_s.nombre.data,
                           apellidos = forma_s.apellidos.data,
@@ -158,6 +192,7 @@ def addSubject():
 #ADD REPORT
 #
 @app.route('/reportes/addreport', methods=['GET', 'POST'])
+@login_required
 def addReport():    
     forma_r = reportForm()
     forma_s = subjectForm()
@@ -204,9 +239,8 @@ def addReport():
 #LISTA REPORTES
 #
 @app.route('/reportes/reportsall', methods=['GET', 'POST'])
+@login_required
 def reportsAll():
-    subjects_todo = subjects()
-    reports_todo = reports()
     lista_reportes = reports.query.order_by(reports.fecha_creacion)
     return render_template('reportsall.html',
                            lista_reportes = lista_reportes)

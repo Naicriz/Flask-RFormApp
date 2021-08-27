@@ -4,9 +4,9 @@
  -->
 {% block content %}
 <center>
-    <h1>REPORTES</h1>
-    </center>
-    <br/>
+  <h1>REPORTES</h1>
+</center>
+<br/>
 <div class="shadow-lg p-3 mb-5 bg-light rounded">
     <form method="POST">
         <fieldset>
@@ -14,7 +14,8 @@
             <table class="table table-hover table-bordered">
             {% for reporte in lista_reportes %}
                 <tr>
-                <td>id: {{ reporte.id }} - userid: {{ reporte.user_id }} - sujetoid: {{ reporte.subject_id }} - satisfacción: {{ reporte.satisfaccion }} - recomendacion: {{ reporte.recomendacion }} - Fecha Salida: {{ reporte.fecha_salida }} - Comentarios: {{ reporte.comentarios }} 
+                <td>IDREPORTE: <{{ reporte.id }}> - USERID: <{{ reporte.user_id }}> - SUJETOID: <{{ reporte.subject_id }}></td>
+                <td>LOCAL: <{{ reporte.local}}> - FECHA INGRESO: <{{ reporte.fecha_ingreso }}> - FECHA SALIDA: <{{ reporte.fecha_salida }}>  -  SATISFACCIÓN(1-10): <{{ reporte.satisfaccion }}>  - recomendacion: {{ reporte.recomendacion }} -  Comentarios: {{ reporte.comentarios }} 
                 </td>
                 </tr>
             {% endfor %}

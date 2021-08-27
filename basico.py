@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = "superultraclavesecreta"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'logIn'
+login_manager.login_view = 'login'
 
 #
 #DATABASE
